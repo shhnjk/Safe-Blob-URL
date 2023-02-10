@@ -46,3 +46,52 @@ The cross-origin Blob URL is designed in a way that these XSS won't happen (beca
 Many Web apps require a place to host user contents (e.g. `usercontent.goog`, `dropboxusercontent.com`, etc) to safely render them. In order to do so securely (e.g. to avoid XSS, [cookie bomb](https://speakerdeck.com/filedescriptor/the-cookie-monster-in-your-browsers?slide=26), and [Spectre](https://security.googleblog.com/2021/03/a-spectre-proof-of-concept-for-spectre.html) attacks), a site needs to register a [sandbox domain](https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html), add it to [public suffix list](https://publicsuffix.org/), and then host user contents in randomly generated subdomains. However this is not something that any site can afford due to engineering and maintenance cost.
 
 The cross-origin Blob URL provides a way to render user contents in a cross-site context without such setup.
+
+## FAQ
+
+### Why not opaque Blob URLs?
+
+Good question! There has been [discussions](https://github.com/w3c/FileAPI/issues/74) around adding a way to create opaque Blob URLs.
+
+However, there are few issues in opaque Blob URLs.
+
+1. Access to cetain APIs are prohibited (e.g. [cookie](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie), [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage), etc). Therefore code that touches any prohibited API causes breakage. Which isn't ideal for this proposal, because one of the goals is to provide a native alternative to sandbox domains.
+2. Opaque origins are serialized to "null". This makes it difficult for a Blob URL creator to send [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)s to the Blob URL iframe and ensure that it is received to the intended page (because any other opaque origin will have "null" origin).
+
+### Who is the creator of a cross-origin Blob URL?
+
+A context (e.g. Window, Worker, etc) which called [`URL.createObjectURL`](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) method to create a Blob URL is the creator (i.e. not the context which created a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) object).
+
+### Is there a way for a cross-origin Blob URL to get its creator's origin then?
+
+Yes!!!
+We'd like to expose `URL.getCreatorOrigin` method to [URL interface](https://developer.mozilla.org/en-US/docs/Web/API/URL).
+
+```
+// script on blob:https://[UUID]/UUID
+window.addEventListener('message', event => {
+  if (event.origin === URL.getCreatorOrigin(location.href)) {
+    console.log('message from a trusted creator!');
+  }
+});
+```
+
+We could avoid exposing this method by including the creator origin in a cross-origin Blob URL (e.g. `blob:https://[UUID]/example.com`), but I have a slight concern of phishing if the Blob URL is rendered on a top-level page.
+
+### Can we apply CSP or sandbox to a cross-origin Blob URL?
+
+Yes! You can use iframe sandbox and/or [CSP Embedded Enforcement](https://w3c.github.io/webappsec-cspee/) to apply CSP and/or sandbox.
+
+```
+<iframe sandbox="allow-scripts" csp="default-src 'self';" src="blob:https://[958c8e12-9f61-43a0-950a-56ecb19d3028]/958c8e12-9f61-43a0-950a-56ecb19d3028"></iframe>
+```
+
+You can also add a `<meta>` tag with CSP in the Blob URL content to enforce CSP (but not sandbox).
+
+### If CSP is not inherited to cross-origin Blob URLs, isn't it a CSP bypass?
+
+No, because cross-origin Blob URLs are treated as a cross-origin URL, it's similar to embedding any other cross-origin pages (which have their own CSP settings).
+
+### Is there a way to block cross-origin Blob URLs in iframes.
+
+If there are sites which deploys CSP such as `frame-src 'self' blob:;` and wish to block cross-origin Blob URLs, we could add a keyword like `'deny-unique-blob'` for `frame-src` to specifically block cross-origin Blob URLs.
