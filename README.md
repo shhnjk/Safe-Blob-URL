@@ -71,7 +71,7 @@ While I'm okay with changing it to `blob:scheme://UUID/UUID` or similar other fo
 
 A context (e.g. Window, Worker, etc) which called [`URL.createObjectURL`](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) method to create a Blob URL is the creator (i.e. not the context which created a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) object).
 
-### Is there a way for a cross-origin Blob URL to get its creator's origin then?
+### Is there a way for a cross-origin Blob URL to get its creator's origin?
 
 Yes!!!
 We'd like to expose `URL.getCreatorOrigin` method to the [URL interface](https://developer.mozilla.org/en-US/docs/Web/API/URL).
