@@ -43,7 +43,7 @@ The cross-origin Blob URL is designed in a way that these XSS won't happen (beca
 
 ### A native alternative to sandbox domains
 
-Many Web apps require a place to host user contents (e.g. `usercontent.goog`, `dropboxusercontent.com`, etc) to safely render them. In order to do so securely (e.g. to avoid XSS, [cookie bomb](https://speakerdeck.com/filedescriptor/the-cookie-monster-in-your-browsers?slide=26), and [Spectre](https://security.googleblog.com/2021/03/a-spectre-proof-of-concept-for-spectre.html) attacks), a site needs to register a [sandbox domain](https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html), add it to the [public suffix list](https://publicsuffix.org/), and then host user contents in randomly generated subdomains. However this is not something that any site can afford due to engineering and maintenance cost.
+Many Web apps require a place to host user contents (e.g. `usercontent.goog`, `dropboxusercontent.com`, etc) to safely render them. In order to do so securely (e.g. to avoid exploitable XSS, [cookie bomb](https://speakerdeck.com/filedescriptor/the-cookie-monster-in-your-browsers?slide=26), and [Spectre](https://security.googleblog.com/2021/03/a-spectre-proof-of-concept-for-spectre.html) attacks), a site needs to register a [sandbox domain](https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html), add it to the [public suffix list](https://publicsuffix.org/), and then host user contents in randomly generated subdomains. However this is not something that any site can afford due to engineering and maintenance cost.
 
 The cross-origin Blob URL provides a way to render user contents in a cross-site context without such setup.
 
