@@ -108,3 +108,9 @@ If there are sites which deploys CSP such as `frame-src 'self' blob:;` and wish 
 ### Who is allowed to fetch or navigate to a cross-origin Blob URL?
 
 Only pages which are same-origin with the cross-origin Blob URL creator can fetch or navigate to the cross-origin Blob URL.
+
+## Acknowledgements
+
+Following folks provided insightful feedback which led to the shape of this proposal.
+
+[Damien Engels](https://github.com/engelsdamien), [David Dworken](https://github.com/ddworken), [terjanq](https://github.com/terjanq), and [Mike West](https://github.com/mikewest).
