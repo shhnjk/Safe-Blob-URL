@@ -23,7 +23,7 @@ if ('crossOrigin' in Blob.prototype && blob.crossOrigin) {
 
 A cross-origin Blob URL is special in a few ways.
 1. It has a format of `blob:scheme://[UUID]/UUID`.
-2. It is has a unique non-opaque origin (e.g. `https://[b9b68b26-a98b-4ad6-b089-33d2afa96944]`).
+2. It has a unique non-opaque origin (e.g. `https://[b9b68b26-a98b-4ad6-b089-33d2afa96944]`).
 3. It does *NOT* inherit CSP from the creator.
 4. It is treated as cross-site to other URLs (except itself) when rendered as a document (e.g. in [Site Isolation](https://www.chromium.org/Home/chromium-security/site-isolation/)).
 
@@ -43,7 +43,7 @@ The cross-origin Blob URL is designed in a way that these XSS won't happen (beca
 
 ### A native alternative to sandbox domains
 
-Many Web apps require a place to host user contents (e.g. `usercontent.goog`, `dropboxusercontent.com`, etc) to safely render them. In order to do so securely (e.g. to avoid XSS, [cookie bomb](https://speakerdeck.com/filedescriptor/the-cookie-monster-in-your-browsers?slide=26), and [Spectre](https://security.googleblog.com/2021/03/a-spectre-proof-of-concept-for-spectre.html) attacks), a site needs to register a [sandbox domain](https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html), add it to [public suffix list](https://publicsuffix.org/), and then host user contents in randomly generated subdomains. However this is not something that any site can afford due to engineering and maintenance cost.
+Many Web apps require a place to host user contents (e.g. `usercontent.goog`, `dropboxusercontent.com`, etc) to safely render them. In order to do so securely (e.g. to avoid XSS, [cookie bomb](https://speakerdeck.com/filedescriptor/the-cookie-monster-in-your-browsers?slide=26), and [Spectre](https://security.googleblog.com/2021/03/a-spectre-proof-of-concept-for-spectre.html) attacks), a site needs to register a [sandbox domain](https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html), add it to the [public suffix list](https://publicsuffix.org/), and then host user contents in randomly generated subdomains. However this is not something that any site can afford due to engineering and maintenance cost.
 
 The cross-origin Blob URL provides a way to render user contents in a cross-site context without such setup.
 
@@ -51,7 +51,7 @@ The cross-origin Blob URL provides a way to render user contents in a cross-site
 
 ### Why not opaque Blob URLs?
 
-Good question! There has been [discussions](https://github.com/w3c/FileAPI/issues/74) around adding a way to create opaque Blob URLs.
+Good question! There has been [discussion](https://github.com/w3c/FileAPI/issues/74) around adding a way to create opaque Blob URLs.
 
 However, there are few issues in opaque Blob URLs.
 
@@ -65,7 +65,7 @@ A context (e.g. Window, Worker, etc) which called [`URL.createObjectURL`](https:
 ### Is there a way for a cross-origin Blob URL to get its creator's origin then?
 
 Yes!!!
-We'd like to expose `URL.getCreatorOrigin` method to [URL interface](https://developer.mozilla.org/en-US/docs/Web/API/URL).
+We'd like to expose `URL.getCreatorOrigin` method to the [URL interface](https://developer.mozilla.org/en-US/docs/Web/API/URL).
 
 ```
 // script on blob:https://[UUID]/UUID
