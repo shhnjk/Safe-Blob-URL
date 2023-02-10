@@ -101,6 +101,10 @@ You can also add a `<meta>` tag with CSP in the Blob URL content to enforce CSP 
 
 No, because cross-origin Blob URLs are treated as a cross-origin URL, it's similar to embedding any other cross-origin pages (which have their own CSP settings).
 
-### Is there a way to block cross-origin Blob URLs in iframes.
+### Is there a way to block cross-origin Blob URLs in iframes?
 
 If there are sites which deploys CSP such as `frame-src 'self' blob:;` and wish to block cross-origin Blob URLs, we could add a keyword like `'deny-unique-blob'` for `frame-src` to specifically block cross-origin Blob URLs.
+
+### Who is allowed to fetch or navigate to a cross-origin Blob URL?
+
+Only pages which are same-origin with the cross-origin Blob URL creator can fetch or navigate to the cross-origin Blob URL.
