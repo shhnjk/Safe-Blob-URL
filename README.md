@@ -58,6 +58,15 @@ However, there are few issues in opaque Blob URLs.
 1. Access to cetain APIs are prohibited (e.g. [cookie](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie), [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage), etc). Therefore code that touches any prohibited API causes breakage. Which isn't ideal for this proposal, because one of the goals is to provide a native alternative to sandbox domains.
 2. Opaque origins are serialized to "null". This makes it difficult for a Blob URL creator to send [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)s to the Blob URL iframe and ensure that it is received to the intended page (because any other opaque origin will have "null" origin).
 
+Therefore, I think cross-origin Blob URLs are better!
+
+### The format of cross-origin Blob URLs look weird. Why did you choose that?
+
+While I'm okay with changing it to `blob:scheme://UUID/UUID` or similar other format, here are some reasons.
+
+1. It is a [clever idea](https://github.com/whatwg/html/issues/3585).
+2. All requests that require an origin header will have `Origin: https://[UUID]` for cross-origin Blob URLs. This form of origin is very similar to [IPv6 URLs](https://www.rfc-editor.org/rfc/rfc2732.html). But as far as I know, the `https://UUID`  origin format does not exist today. Therefore, I thought it will cause less breakages.
+
 ### Who is the creator of a cross-origin Blob URL?
 
 A context (e.g. Window, Worker, etc) which called [`URL.createObjectURL`](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) method to create a Blob URL is the creator (i.e. not the context which created a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) object).
