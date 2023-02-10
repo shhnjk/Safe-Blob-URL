@@ -97,11 +97,16 @@ Yes! You can use iframe sandbox and/or [CSP Embedded Enforcement](https://w3c.gi
 
 You can also add a `<meta>` tag with CSP in the Blob URL content to enforce CSP (but not sandbox).
 
+### Why is CSP not inherited from the creator to cross-origin Blob URLs?
+
+A creator of cross-origin Blob URLs is often a sensitive origin. And therefore it might have strict CSP.
+However, the creator might want arbitrary scripts to run inside a cross-origin Blob URL (because it act like a sandbox domain), which is not possible if CSP is automatically inherited.
+
 ### If CSP is not inherited to cross-origin Blob URLs, isn't it a CSP bypass?
 
 No, because cross-origin Blob URLs are treated as a cross-origin URL, it's similar to embedding any other cross-origin pages (which have their own CSP settings).
 
-### Is there a way to block cross-origin Blob URLs in iframes?
+### Is there a way to block cross-origin Blob URLs in iframe?
 
 If there are sites which deploys CSP such as `frame-src 'self' blob:;` and wish to block cross-origin Blob URLs, we could add a keyword like `'deny-unique-blob'` for `frame-src` to specifically block cross-origin Blob URLs.
 
