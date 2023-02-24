@@ -65,7 +65,7 @@ Therefore, I think cross-origin Blob URLs are better!
 While I'm okay with changing it to `blob:scheme://UUID/UUID` or similar other format, here are some reasons.
 
 1. It is a [clever idea](https://github.com/whatwg/html/issues/3585).
-2. All requests that require an origin header will have `Origin: https://[UUID]` for cross-origin Blob URLs. This form of origin is very similar to [IPv6 URLs](https://www.rfc-editor.org/rfc/rfc2732.html). But as far as I know, the `https://UUID`  origin format does not exist today. Therefore, I thought it will cause less breakages.
+2. All requests that require an origin header will have `Origin: https://[UUID]` for cross-origin Blob URLs. This form of origin is very similar to [IPv6 URLs](https://www.rfc-editor.org/rfc/rfc2732.html) (e.g. [http://[2607:f8b0:400a:807::200e]](http://[2607:f8b0:400a:807::200e])). But as far as I know, the `https://UUID` origin format does not exist today. Therefore, I thought it will cause less breakages.
 
 ### Who is the creator of a cross-origin Blob URL?
 
@@ -108,7 +108,7 @@ No, because cross-origin Blob URLs are treated as a cross-origin URL, it's simil
 
 ### Is there a way to block cross-origin Blob URLs in iframe?
 
-If there are sites which deploys CSP such as `frame-src 'self' blob:;` and wish to block cross-origin Blob URLs, we could add a keyword like `'deny-unique-blob'` for `frame-src` to specifically block cross-origin Blob URLs.
+Yes! For sites with restrictive CSP such as `frame-src 'self' blob:;`, cross-origin Blob URL iframes are blocked by default. And those sites would need to set `'allow-unique-blob'` keyword in `frame-src` to opt into framing cross-origin Blob URLs.
 
 ### Who is allowed to fetch or navigate to a cross-origin Blob URL?
 
